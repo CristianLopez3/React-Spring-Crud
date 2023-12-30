@@ -46,4 +46,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                .toList() -> you can also use this method to convert in a list
     }
 
+    @Override
+    public EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Employee is not exist with the given id:  " + employeeId)
+                );
+        employee.setFirstName(employeeDto.firstName());
+        employee.setLastName(employeeDto.lastName());
+        employee.setEmail(employeeDto.email());
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeDto(updatedEmployee);
+    }
+
 }
