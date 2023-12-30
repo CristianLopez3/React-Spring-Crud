@@ -4,6 +4,6 @@ import net.cristian.ems.dto.EmployeeDto;
 
 public interface EmployeeService {
 
-    public EmployeeDto createEmployee(EmployeeDto employeeDto);
-
+    EmployeeDto createEmployee(EmployeeDto employeeDto);
+    EmployeeDto getEmployeeById(Long employeeId);
 }
