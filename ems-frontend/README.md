@@ -12,3 +12,7 @@ Frontend section of our Employees Managment System
 ```npm
   npm i axios --save
 ```
+* React Router
+```npm
+  npm i react-router-dom --save
+```
