@@ -1,6 +1,6 @@
 import EmployessRow from "./EmployessRow";
 
-const EmployeesTable = ({ employees }) => {
+const EmployeesTable = ({ employees, setDataToEdit }) => {
   return (
     <table className="table  table-bordered table-hover">
       <thead>
@@ -21,6 +21,7 @@ const EmployeesTable = ({ employees }) => {
               firstName={employee.firstName}
               lastName={employee.lastName}
               email={employee.email}
+              setDataToEdit={setDataToEdit}
             />
           ))
         ) : (

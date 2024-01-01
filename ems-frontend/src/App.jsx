@@ -18,7 +18,11 @@ function App() {
           <Route path="/employees" element={<EmployeesList />} />
           {/* http://localhost:5050/employees/add */}
           <Route path="/employees/add" element={<EmployeesForm />} />
-
+          {/* http://localhost:5050/employees/add/1 */}
+          <Route path="/employees/update/:id" element={<EmployeesForm />} />
+          {/* http://localhost:5050/employees/delete/1 */}
+          <Route path="/employees/delete/:id" element={<EmployeesForm />} />
+      
           <Route path="*" element={<Error404 />} />
         </Routes>
         <Footer />

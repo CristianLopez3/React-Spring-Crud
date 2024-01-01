@@ -1,6 +1,10 @@
-import { useState } from "react";
-import { saveEmployee } from "../service/employeesService";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  getEmployee,
+  saveEmployee,
+  updateEmployee,
+} from "../service/employeesService";
+import { useNavigate, useParams } from "react-router-dom";
 
 const initialForm = {
   firstName: "",
@@ -11,33 +15,49 @@ const initialForm = {
 const EmployeesForm = () => {
   const [employee, setEmployee] = useState(initialForm);
   const [errors, setErrors] = useState(initialForm);
+  const { id } = useParams();
   const navigator = useNavigate();
 
   const handleChange = (e) =>
     setEmployee({ ...employee, [e.target.name]: e.target.value });
 
+  useEffect(() => {
+    if (id) {
+      getEmployee(id)
+        .then((res) => {
+          // console.log(res);
+          let employeCopy = {
+            id: res.data.id,
+            firstName: res.data.firstName,
+            lastName: res.data.lastName,
+            email: res.data.email,
+          };
+          setEmployee(employeCopy);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!employee.firstName || !employee.lastName || !employee.email) {
-    //   alert("Incomplete Data");
-    //   return;
-    // }
     if (isValidForm()) {
-      console.log("true");
-      saveEmployee(employee)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-
-      handleReset();
+      if (id) {
+        updateEmployee(employee)
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      } else {
+        saveEmployee(employee)
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
       navigator("/employees");
     }
-    console.log("false");
-    console.log(errors);
   };
 
   const isValidForm = () => {
     let valid = true;
     let errorsCopy = { ...errors };
+
     if (!employee.firstName.trim()) {
       errorsCopy.firstName = "First name is required!";
       valid = false;
@@ -50,20 +70,29 @@ const EmployeesForm = () => {
       errorsCopy.email = "Email is required!";
       valid = false;
     }
-    console.log(errorsCopy);
-    setErrors(errorsCopy); // Actualización del estado
-  
-    // La comprobación de errores se realiza después de la actualización del estado
+    setErrors(errorsCopy);
     return valid;
   };
-  
 
-  const handleReset = () => setEmployee(initialForm);
+  const titlePage = () => {
+    if (id) {
+      return <h2 className="text-center">Update Employee</h2>;
+    } else {
+      return <h2 className="text-center">Add New Employee</h2>;
+    }
+  };
 
   return (
     <div className="container d-flex justify-content-center">
       <div className="card m-5 border-dark ">
         <div className="card-body">
+          <button
+            className="py-1 mb-3 bg-warning text-dark"
+            onClick={() => navigator("/employees")}
+          >
+            Get Back
+          </button>
+          {titlePage()}
           <form onSubmit={handleSubmit} className="form">
             <label htmlFor="firstName">First Name:</label>
             <input
@@ -103,7 +132,7 @@ const EmployeesForm = () => {
               value={employee.email}
               onChange={handleChange}
             />
-             {errors.email && (
+            {errors.email && (
               <div className="invalid-feedback"> {errors.email} </div>
             )}
 
