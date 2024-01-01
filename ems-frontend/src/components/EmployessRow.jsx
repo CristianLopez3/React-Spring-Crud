@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { deleteEmployee } from "../service/employeesService";
 
 const EmployessRow = ({ id, firstName, lastName, email, setDataToEdit }) => {
   const navigator = useNavigate();
 
   const handleUpdate = (id) => navigator(`/employees/update/${id}`);
-  const handleDelete = (id) => navigator(`/employees/delete/${id}`);
+  const handleDelete = (id) => {
+    deleteEmployee(id)
+      .then((res)=>alert(res.data))
+      .catch((err) => console.warn(err));
+  };
 
   return (
     <tr>
@@ -15,8 +20,7 @@ const EmployessRow = ({ id, firstName, lastName, email, setDataToEdit }) => {
       <td>
         <button
           className="btn btn-warning mx-2"
-          onClick={() => handleUpdate(id)}
-        >
+          onClick={() => handleUpdate(id)}>
           update
         </button>
         <button className="btn btn-danger" onClick={() => handleDelete(id)}>

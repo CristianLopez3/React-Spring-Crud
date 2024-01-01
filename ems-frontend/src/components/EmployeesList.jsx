@@ -11,8 +11,7 @@ const EmployeesList = () => {
   useEffect(() => {
     getEmployeesList()
       .then((res) => {
-        // console.log(res.data);
-        return setEmployees(res.data);
+        setEmployees(res.data);
       })
       .catch((error) => console.log(error));
   }, []);
